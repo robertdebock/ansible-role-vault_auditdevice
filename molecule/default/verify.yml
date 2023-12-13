@@ -1,0 +1,13 @@
+---
+- name: Verify
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Check if /opt/vault/vault_audit.log exists
+      ansible.builtin.stat:
+        path: /opt/vault/vault_audit.log
+      register: vault_audit_log
+      failed_when:
+        - not vault_audit_log.stat.exists

@@ -1,0 +1,22 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  pre_tasks:
+    - name: Read /root/.vault-token
+      ansible.builtin.slurp:
+        src: /root/.vault-token
+      register: vault_auditdevice_token_slurped
+
+  roles:
+    - role: ansible-role-vault_auditdevice
+      vault_auditdevice_ssl_verify: no
+      vault_auditdevice_token: "{{ vault_auditdevice_token_slurped['content'] | b64decode }}"
+      vault_auditdevice_list:
+        - name: local_file/  # Make sure the value is trailed by a `/`.
+          type: file
+          description: File Audit Device
+          options:
+            file_path: /opt/vault/vault_audit.log

@@ -1,0 +1,62 @@
+---
+
+- name: Prepare
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  roles:
+    - role: robertdebock.bootstrap
+    - role: robertdebock.hashicorp
+    - role: robertdebock.vault
+
+  tasks:
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
+
+    - name: Initialize vault
+      ansible.builtin.command:
+        cmd: vault operator init -format=yaml
+      register: vault_auditdevice_init
+      changed_when: yes
+      environment:
+        VAULT_SKIP_VERIFY: yes
+      notify:
+        - Unseal vault
+
+    - name: Format vault_auditdevice_init_yaml
+      ansible.builtin.set_fact:
+        vault_auditdevice_init_yaml: "{{ vault_auditdevice_init.stdout | from_yaml }}"
+      when:
+        - vault_auditdevice_init is defined
+
+    - name: Store vault token
+      ansible.builtin.copy:
+        content: "{{ vault_auditdevice_init_yaml['root_token'] }}"
+        dest: /root/.vault-token
+        owner: root
+        group: root
+        mode: 0600
+      when:
+        - vault_auditdevice_init is defined
+
+    # - name: Store unseal keys
+    #   ansible.builtin.copy:
+    #     content: "{{ vault_auditdevice_init_yaml['unseal_keys_b64'] }}"
+    #     dest: /root/.vault-unseal-keys
+    #     owner: root
+    #     group: root
+    #     mode: 0600
+    #   when:
+    #     - vault_auditdevice_init is defined
+
+  handlers:
+    - name: Unseal vault
+      ansible.builtin.command:
+        cmd: vault operator unseal "{{ item }}"
+      changed_when: yes
+      loop: "{{ vault_auditdevice_init_yaml['unseal_keys_b64'] }}"
+      environment:
+        VAULT_SKIP_VERIFY: yes
+      when:
+        - vault_auditdevice_init is defined
