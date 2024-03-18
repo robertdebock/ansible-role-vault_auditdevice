@@ -2,8 +2,8 @@
 
 - name: Prepare
   hosts: all
-  become: yes
-  gather_facts: no
+  become: true
+  gather_facts: false
 
   roles:
     - role: robertdebock.bootstrap
@@ -19,9 +19,9 @@
       ansible.builtin.command:
         cmd: vault operator init -format=yaml
       register: vault_auditdevice_init
-      changed_when: yes
+      changed_when: true
       environment:
-        VAULT_SKIP_VERIFY: yes
+        VAULT_SKIP_VERIFY: true
       notify:
         - Unseal vault
 
@@ -55,9 +55,9 @@
     - name: Unseal vault
       ansible.builtin.command:
         cmd: vault operator unseal "{{ item }}"
-      changed_when: yes
+      changed_when: true
       loop: "{{ vault_auditdevice_init_yaml['unseal_keys_b64'] }}"
       environment:
-        VAULT_SKIP_VERIFY: yes
+        VAULT_SKIP_VERIFY: true
       when:
         - vault_auditdevice_init is defined
