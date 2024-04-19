@@ -14,6 +14,7 @@
     headers:
       X-Vault-Token: "{{ vault_auditdevice_token }}"
     validate_certs: "{{ vault_auditdevice_ssl_verify }}"
+    return_content: true
   register: vault_auditdevice_list_retreived
   run_once: true
   changed_when: false
