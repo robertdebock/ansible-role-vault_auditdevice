@@ -81,16 +81,6 @@ The machine needs to be prepared. In CI this is done using [`molecule/default/pr
       when:
         - vault_auditdevice_init is defined
 
-    # - name: Store unseal keys
-    #   ansible.builtin.copy:
-    #     content: "{{ vault_auditdevice_init_yaml['unseal_keys_b64'] }}"
-    #     dest: /root/.vault-unseal-keys
-    #     owner: root
-    #     group: root
-    #     mode: 0600
-    #   when:
-    #     - vault_auditdevice_init is defined
-
   handlers:
     - name: Unseal vault
       ansible.builtin.command:
