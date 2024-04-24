@@ -10,6 +10,8 @@
     - role: robertdebock.core_dependencies
     - role: robertdebock.hashicorp
     - role: robertdebock.vault
+      vault_hardening_disable_swap: true
+
 
   tasks:
     - name: Flush handlers
