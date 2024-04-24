@@ -50,7 +50,7 @@ The machine needs to be prepared. In CI this is done using [`molecule/default/pr
     - role: robertdebock.core_dependencies
     - role: robertdebock.hashicorp
     - role: robertdebock.vault
-      vault_hardening_disable_swap: true
+      vault_hardening_disable_swap: false
 
 
   tasks:
