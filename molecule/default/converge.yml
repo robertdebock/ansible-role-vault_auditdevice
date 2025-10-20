@@ -11,7 +11,7 @@
       register: vault_auditdevice_token_slurped
 
   roles:
-    - role: ansible-role-vault_auditdevice
+    - role: robertdebock.vault_auditdevice
       vault_auditdevice_ssl_verify: false
       vault_auditdevice_token: "{{ vault_auditdevice_token_slurped['content'] | b64decode }}"
       vault_auditdevice_list:
