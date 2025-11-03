@@ -5,4 +5,4 @@
 repository:
   description: Install and configure vault_auditdevice on your system.
   homepage: https://robertdebock.nl/
-  topics: vaultauditdevice, infrastructure, security, ansible, molecule, tox, playbook
+  topics: vaultauditdevice, infrastructure, security, ansible, molecule, playbook
