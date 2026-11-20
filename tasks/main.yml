@@ -17,7 +17,8 @@
     return_content: true
   register: vault_auditdevice_list_retreived
   run_once: true
-  changed_when: false
+  changed_when:
+    - false
 
 - name: Create log directories
   ansible.builtin.file:
@@ -53,5 +54,6 @@
     label: "{{ item.description }}"
   when:
     - item.name not in vault_auditdevice_list_retreived.content
-  changed_when: true
+  changed_when:
+    - true
   run_once: true
